@@ -1136,6 +1136,7 @@ public class Main {
         System.out.println("4. Znajdź i wypisz wszystkie automaty z Gdańska");
         automatyGdansk(arcades);
         // 5. Znajdź wszystkie wyniki z Mario i wypisz nazwy użytkowników które wystąpiły na więcej niż jednym automacie.
+
         // 6. Znajdź wyniki najlepszego gracza gry BARBIE_DESTRUCTION. Jeśli gracze mają tyle samo punktów to drugim kryterium jest czas. Im krótszy czas gry, tym wyżej powinien być gracz w rankingu.
         // 7. Dla każdego z automatów wypisz jaka jest proporcja ilości rozegranych gier do ilości wyników które przechowują. Wyniki posortuj i wypisz.
         // 8. Znajdź automat dla którego średni czas gry gracza był najkrótszy
