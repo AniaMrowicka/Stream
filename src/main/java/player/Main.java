@@ -1142,6 +1142,8 @@ public class Main {
         // 8. Znajdź automat dla którego średni czas gry gracza był najkrótszy
         // 9. Wylistuj wszystkie automaty. wypisz je posortowane po średnim czasie gry gracza
         // 10. Wypisz wszystkie gry (unikalne)
+        System.out.println("10. Wypisz wszystkie gry (unikalne)");
+        wszystkiegry(arcades);
         // 11. Wypisz wszystkie gry sortując je po ilości zebranych wyników
         // 12. Wypisz wszystkie gry sortując je po średnim wyniku z gry (najpierw dowiedz się ile śrendio gracze zdobywali punktów w danej grze, a następnie posortuj gry)
         // 13. Wypisz nazwisko najlepszego gracza w tetrisa.
@@ -1156,6 +1158,17 @@ public class Main {
 
     }
 
+    private static void wszystkiegry(List<Arcade> arcades) {
+        arcades.stream()
+                .distinct()
+                .flatMap(a -> a.getScoreList().stream()
+                        .map(b -> b.getGame()))
+                .distinct()
+                .collect(Collectors.toList())
+                .forEach(System.out::println);
+
+    }
+
     private static Optional<Arcade> najwiecejMario(List<Arcade> arcades) {
         Optional<Arcade> mario1 = arcades.stream()
                 .max(Comparator.comparing(
@@ -1166,6 +1179,7 @@ public class Main {
                 ));
         return mario1;
     }
+
     private static Optional<Company> theMostExpensivePurchase(List<Company> companies) {
         Optional<Company> theMostExpensive = companies.stream()
                 .max(Comparator.comparingDouble(
@@ -1174,13 +1188,14 @@ public class Main {
                                 .mapToDouble(quality -> quality.getQuantity() * quality.getProduct().getPrice()).sum()));
         return theMostExpensive;
     }
+
     private static void posortowanePoIlosciPunktow(List<Arcade> arcades) {
         arcades.stream()
                 .sorted(Comparator.comparingInt(
                         pkt -> pkt.getScoreList()
-                        .stream()
-                        .mapToInt(score -> score.getScore()).sum()))
-        .forEach(System.out::println);
+                                .stream()
+                                .mapToInt(score -> score.getScore()).sum()))
+                .forEach(System.out::println);
 
     }
 
