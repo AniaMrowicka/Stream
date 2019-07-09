@@ -480,11 +480,26 @@ public class Main {
         whoBuyedNetworkSwitch(companies);
         System.out.println("Zadanie 15");
         System.out.println(buyingTheMostCoffe(companies));
+        System.out.println("Zadanie 16");
+        System.out.println(howMuchCoffee(companies));
+        System.out.println("Zadanie 17");
+        System.out.println(howMuchCoffeeInEvenDays(companies));
+        System.out.println("Zadanie 18");
+        System.out.println("Zadanie 19");
+        System.out.println("Zadanie 20");
+        System.out.println("Zadanie 21");
+        System.out.println("Zadanie 22");
+        System.out.println("Zadanie 23");
+        System.out.println("Zadanie 24");
+        System.out.println("Zadanie 25");
+        System.out.println("Zadanie 26");
+        System.out.println("Zadanie 27");
+        System.out.println("Zadanie 28");
+        System.out.println("Zadanie 29");
         System.out.println("Zadanie 30");
         solwitShoppingList(companies);
+
     }
-
-
     // Polecenie 1:
 // Dane to Firmy oraz ich zakupy z miesiąca styczeń/luty 2018.
 // Wszystkie rozwiązania zapisz w oddzielnych metodach statycznych w klasie Main.
@@ -611,28 +626,44 @@ public class Main {
     // 13. *Zwróć miejscowość która wydała najwięcej pieniędzy. Stwórz mapę Map<String, Double> gdzie kluczem jest miejscowość, a wartością jest kwota wydana przez firmy
     // pochodzące z tamtej miejscowości
 // 14. Wypisz firmy które 15 stycznia 2018 kupiły "Network Switch"
-private static void whoBuyedNetworkSwitch(List<Company> companies){
+    private static void whoBuyedNetworkSwitch(List<Company> companies) {
         companies.stream()
                 .filter(c -> c.getPurchaseList()
                         .stream()
                         .filter(d -> d.getProduct().getName().equalsIgnoreCase("Network Switch"))
-                .allMatch(e -> e.getPurchaseDate().isEqual(LocalDate.of(2018,01,15))))
+                        .allMatch(e -> e.getPurchaseDate().isEqual(LocalDate.of(2018, 01, 15))))
                 .forEach(System.out::println);
-}
-// 15. Znajdź firmę która kupuje najwięcej kawy
+    }
+
+    // 15. Znajdź firmę która kupuje najwięcej kawy
     private static Optional<Company> buyingTheMostCoffe(List<Company> companies) {
         return companies.stream()
                 .max(Comparator.comparing(
                         buy -> buy.getPurchaseList()
                                 .stream()
                                 .filter(product -> product.getProduct().getName().equalsIgnoreCase("Coffee"))
-                        .map(d -> d.getProduct()).count()));
+                                .map(d -> d.getProduct()).count()));
     }
 
     // 16. Wypisz ile łącznie zostało kupionej kawy Arabica w miesiącu styczniu
-//        company_16_arabica_january(companies);
-// 17. Wypisz ile łącznie kawy (Arabica i Roubsta) zostało kupionej w dni parzyste.
-//        company_17_arabica_robusta_even(companies);
+    private static double howMuchCoffee(List<Company> companies) {
+        return companies.stream()
+                .flatMap(list -> list.getPurchaseList().stream()
+                        .filter(coffe -> coffe.getProduct().getName().equalsIgnoreCase("Coffee, Arabica") && coffe.getPurchaseDate().getMonthValue() == 1))
+                .mapToDouble(data -> data.getQuantity()).sum();
+    }
+
+    // 17. Wypisz ile łącznie kawy (Arabica i Roubsta) zostało kupionej w dni parzyste.
+    private static double howMuchCoffeeInEvenDays(List<Company> companies) {
+        return companies.stream()
+                .flatMap(list -> list.getPurchaseList()
+                        .stream()
+                        .filter(coffee -> coffee.getProduct().getName().equalsIgnoreCase("Coffee, Arabica")
+                                || coffee.getProduct().getName().equalsIgnoreCase("Coffee, Robusta") &&
+                                coffee.getPurchaseDate().getDayOfMonth()%2 ==0))
+                        .mapToDouble(data-> data.getQuantity()).sum();
+    }
+
 // 18. Zwróć Mapę (Map<Product, Set<Company>>) w której kluczem jest typ kawy (powinny być dwie, Arabica i Robusta) i wartością są listy firm które kupiły podaną kawę chociaż raz.
 //        company_18_mapa_kaw(companies);
 // 19. Zwróć firmę która w styczniu kupiła najwięcej paliwa (ropy)
@@ -926,30 +957,6 @@ private static void whoBuyedNetworkSwitch(List<Company> companies){
         moneyForNothing.entrySet().forEach(companyDoubleEntry -> System.out.println(companyDoubleEntry.getKey().getName() + " " + companyDoubleEntry.getValue()));
     }
 
-    private static void company_17_arabica_robusta_even(List<Company> companies) {
-        double sum = companies.stream()
-                .flatMap(c -> c.getPurchaseList()
-                        .stream()
-                        .filter(p -> (p.getProduct().getName().equalsIgnoreCase("Coffee, Arabica") || p.getProduct().getName().equalsIgnoreCase("Coffee, Robusta")) && p.getPurchaseDate().getDayOfMonth() % 2 == 0))
-                .mapToDouble(Purchase::getQuantity).sum();
-
-        System.out.println("Total amount of coffee bought on even days, by all companies equals: " + sum + " kg");
-    }
-
-    private static void company_16_arabica_january(List<Company> companies) {
-        double sum = companies.stream()
-                .flatMap(c -> c.getPurchaseList().stream().filter(p -> p.getProduct().getName().equalsIgnoreCase("Coffee, Arabica") && p.getPurchaseDate().getMonth().getValue() == 1))
-                .mapToDouble(Purchase::getQuantity).sum();
-
-        System.out.println("Total amount of Coffee Arabica bought in January equals: " + sum + " kg");
-    }
-
-    private static void company_14_network(List<Company> companies) {
-        companies
-                .stream()
-                .filter(c -> c.getPurchaseList().stream().anyMatch(p -> p.getPurchaseDate().isEqual(LocalDate.of(2018, 1, 15)) && p.getProduct().getName().equalsIgnoreCase("network switch")))
-                .forEach(c -> System.out.println(c.getName() + " " + c.getCityHeadquarters()));
-    }
 
     private static void company_18_mapa_kaw(List<Company> companies) {
         List<Product> products = companies.stream()
@@ -975,38 +982,4 @@ private static void whoBuyedNetworkSwitch(List<Company> companies){
         System.out.println(companiesWhoDrinkCoffee);
     }
 
-    private static void company_13_najwiecej_hajsu(List<Company> companies) {
-        /*Map<String, Double> wydanehajsy = */
-        Set<String> miescowosci = companies.stream().map(company -> company.getCityHeadquarters()).collect(Collectors.toSet());
-
-        Map<String, Double> wydanehajsy = miescowosci.stream().collect(Collectors.toMap(
-                m -> m,
-                m -> companies.stream()
-                        .filter(company -> company.getCityHeadquarters().equals(m))
-                        .mapToDouble(c ->
-                                c.getPurchaseList().stream().mapToDouble(p -> p.getQuantity() * p.getProduct().getPrice()).sum()).sum()));
-
-        System.out.println(wydanehajsy);
-    }
-
-    private static void company_12_zakupy_10k(List<Company> companies) {
-        Optional<Company> firma = companies.stream()
-                .max(Comparator.comparingDouble(
-                        company -> company.getPurchaseList().stream()
-                                .filter(purchase -> purchase.getProduct().getPrice() > 10000)
-                                .mapToDouble(purchase -> purchase.getQuantity()).sum()));
-        System.out.println(firma);
-    }
-
-    private static void company_11_zakupy_najwieksze(List<Company> companies) {
-        Optional<Company> firma = companies.stream()
-                .max(Comparator.comparingDouble(
-                        company -> company.getPurchaseList().stream()
-                                .mapToDouble(purchase -> purchase.getQuantity() * purchase.getProduct().getPrice()).sum()));
-        System.out.println(firma);
-    }
-
-    private static void company_1_wylistuj(List<Company> companies) {
-        companies.forEach(System.out::println);
-    }
 }
